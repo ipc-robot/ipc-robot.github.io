@@ -44,9 +44,9 @@ export default function Dashboard({ data, currentFrame, showAllMetrics = false }
     const forces = Array.from({ length: 14 }).map((_, i) => {
       const baseIdx = 11 + i * 3;
       return {
-        fx: data.map(row => row[baseIdx].toFixed(2)),
-        fy: data.map(row => row[baseIdx + 1].toFixed(2)),
-        fz: data.map(row => row[baseIdx + 2].toFixed(2))
+        fx: data.map(row => parseFloat(row[baseIdx].toFixed(2))),
+        fy: data.map(row => parseFloat(row[baseIdx + 1].toFixed(2))),
+        fz: data.map(row => parseFloat(row[baseIdx + 2].toFixed(2)))
       };
     });
     const tribos = Array.from({ length: 8 }).map((_, i) => data.map(row => row[53 + i].toFixed(2)));
@@ -123,9 +123,9 @@ export default function Dashboard({ data, currentFrame, showAllMetrics = false }
         { gridIndex: 2, type: 'category', data: parsedData.xAxis, show: true, axisLabel: { color: '#718096', fontSize: 10 }, axisLine: { lineStyle: { color: '#E2E8F0' } } }
       ],
       yAxis: [
-        { gridIndex: 0, name: 'Fx (N)', nameLocation: 'middle', nameRotate: 0, nameGap: 35, nameTextStyle: { color: '#ef4444', fontWeight: 'bold' }, type: 'value', min: 0, splitNumber: 2, axisLabel: { color: '#718096', fontSize: 9, showMinLabel: true, showMaxLabel: true, hideOverlap: true }, splitLine: { lineStyle: { color: '#EDF2F7', type: 'dashed' } } },
-        { gridIndex: 1, name: 'Fy (N)', nameLocation: 'middle', nameRotate: 0, nameGap: 35, nameTextStyle: { color: '#10b981', fontWeight: 'bold' }, type: 'value', min: 0, splitNumber: 2, axisLabel: { color: '#718096', fontSize: 9, showMinLabel: true, showMaxLabel: true, hideOverlap: true }, splitLine: { lineStyle: { color: '#EDF2F7', type: 'dashed' } } },
-        { gridIndex: 2, name: 'Fz (N)', nameLocation: 'middle', nameRotate: 0, nameGap: 35, nameTextStyle: { color: '#3b82f6', fontWeight: 'bold' }, type: 'value', min: 0, splitNumber: 2, axisLabel: { color: '#718096', fontSize: 9, showMinLabel: true, showMaxLabel: true, hideOverlap: true }, splitLine: { lineStyle: { color: '#EDF2F7', type: 'dashed' } } }
+        { gridIndex: 0, name: 'Fx (N)', nameLocation: 'middle', nameRotate: 0, nameGap: 35, nameTextStyle: { color: '#ef4444', fontWeight: 'bold' }, type: 'value', splitNumber: 2, axisLabel: { color: '#718096', fontSize: 9, showMinLabel: true, showMaxLabel: true, hideOverlap: true }, splitLine: { lineStyle: { color: '#EDF2F7', type: 'dashed' } } },
+        { gridIndex: 1, name: 'Fy (N)', nameLocation: 'middle', nameRotate: 0, nameGap: 35, nameTextStyle: { color: '#10b981', fontWeight: 'bold' }, type: 'value', splitNumber: 2, axisLabel: { color: '#718096', fontSize: 9, showMinLabel: true, showMaxLabel: true, hideOverlap: true }, splitLine: { lineStyle: { color: '#EDF2F7', type: 'dashed' } } },
+        { gridIndex: 2, name: 'Fz (N)', nameLocation: 'middle', nameRotate: 0, nameGap: 35, nameTextStyle: { color: '#3b82f6', fontWeight: 'bold' }, type: 'value', splitNumber: 2, axisLabel: { color: '#718096', fontSize: 9, showMinLabel: true, showMaxLabel: true, hideOverlap: true }, splitLine: { lineStyle: { color: '#EDF2F7', type: 'dashed' } } }
       ],
       series: [
         { name: 'Fx(N)', type: 'line', xAxisIndex: 0, yAxisIndex: 0, data: fx, itemStyle: { color: '#ef4444' }, showSymbol: false, lineStyle: { width: 1.5 } },

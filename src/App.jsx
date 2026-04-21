@@ -165,7 +165,7 @@ function App() {
         <div className="content-grid">
           {/* 第一列：视频区域 */}
           <div className="card-column video-area">
-            <video 
+            <video
               ref={videoRef}
               className="video-player"
               onTimeUpdate={handleVideoTimeUpdate}
@@ -201,9 +201,9 @@ function App() {
 
           {/* 第三列：数据面板区域 */}
           <div className="card-column dashboard-area">
-            <Dashboard 
-              data={data} 
-              currentFrame={Math.floor(currentFrame)} 
+            <Dashboard
+              data={data}
+              currentFrame={Math.floor(currentFrame)}
               showAllMetrics={true}
             />
           </div>
@@ -224,11 +224,11 @@ function App() {
             <span style={{ fontSize: '0.85rem', color: '#718096', width: '30px', textAlign: 'center' }}>{playbackSpeed}x</span>
 
             <div style={{ width: '1px', height: '20px', background: '#E2E8F0', margin: '0 8px' }}></div>
-            
+
             {/* 数据选择下拉框 */}
             <div className="select-wrapper">
-              <select 
-                className="control-select" 
+              <select
+                className="control-select"
                 onChange={handleSelectChange}
                 defaultValue="/demo.csv"
               >
@@ -236,12 +236,12 @@ function App() {
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
                 ))}
               </select>
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                accept=".csv" 
-                onChange={handleFileUpload} 
-                style={{ display: 'none' }} 
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept=".csv"
+                onChange={handleFileUpload}
+                style={{ display: 'none' }}
               />
             </div>
           </div>
