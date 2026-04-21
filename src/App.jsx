@@ -34,10 +34,42 @@ function App() {
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const requestRef = useRef();
   const videoRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  const datasetOptions = [
+    { label: '示例数据 (Default)', value: '/demo.csv' },
+    { label: '动作序列 0', value: '/demo_action_0.csv' },
+    { label: '动作序列 1', value: '/demo_action_1.csv' },
+    { label: '动作序列 2', value: '/demo_action_2.csv' },
+    { label: '动作序列 3', value: '/demo_action_3.csv' },
+    { label: '动作序列 4', value: '/demo_action_4.csv' },
+    { label: '动作序列 5', value: '/demo_action_5.csv' },
+    { label: '--- 上传本地文件 ---', value: 'upload' }
+  ];
+
+  const loadDataFromUrl = (url) => {
+    Papa.parse(url, {
+      download: true,
+      header: false,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const numericData = results.data.filter(row => typeof row[0] === 'number');
+        if (numericData.length > 0) {
+          setData(numericData);
+          setCurrentFrame(0);
+          setIsPlaying(true);
+        }
+      },
+      error: (err) => {
+        console.error("Error loading data:", err);
+      }
+    });
+  };
 
   // Initialize with demo data
   useEffect(() => {
-    setData(generateDemoData(500));
+    loadDataFromUrl('/demo.csv');
   }, []);
 
   // Playback Loop
@@ -87,13 +119,11 @@ function App() {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Use PapaParse to read CSV
     Papa.parse(file, {
-      header: false, // assuming pure matrix
-      dynamicTyping: true, // convert strings to numbers
+      header: false,
+      dynamicTyping: true,
       skipEmptyLines: true,
       complete: (results) => {
-        // filter out any text header rows if they exist
         const numericData = results.data.filter(row => typeof row[0] === 'number');
         if (numericData.length > 0) {
           setData(numericData);
@@ -104,6 +134,15 @@ function App() {
         }
       }
     });
+  };
+
+  const handleSelectChange = (e) => {
+    const val = e.target.value;
+    if (val === 'upload') {
+      fileInputRef.current.click();
+    } else {
+      loadDataFromUrl(val);
+    }
   };
 
   // Guard clause
@@ -183,6 +222,28 @@ function App() {
               <FastForward size={18} />
             </button>
             <span style={{ fontSize: '0.85rem', color: '#718096', width: '30px', textAlign: 'center' }}>{playbackSpeed}x</span>
+
+            <div style={{ width: '1px', height: '20px', background: '#E2E8F0', margin: '0 8px' }}></div>
+            
+            {/* 数据选择下拉框 */}
+            <div className="select-wrapper">
+              <select 
+                className="control-select" 
+                onChange={handleSelectChange}
+                defaultValue="/demo.csv"
+              >
+                {datasetOptions.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                accept=".csv" 
+                onChange={handleFileUpload} 
+                style={{ display: 'none' }} 
+              />
+            </div>
           </div>
 
           <div className="timeline-wrapper">
@@ -197,6 +258,7 @@ function App() {
                 setIsPlaying(false);
               }}
               className="progress-bar"
+              style={{ '--progress': `${(currentFrame / (data.length - 1)) * 100}%` }}
             />
             <span className="time-label">
               {data.length > 0 ? new Date(data[data.length - 1][0] * 1000).toISOString().substr(11, 8) : '00:00:00'}
